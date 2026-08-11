@@ -30,7 +30,7 @@ cp .env.example .env
 
 本番の `MCP_SERVER_URL` には HTTPS URL を指定してください。
 
-## 実行
+## ローカルでNode.jsサーバーを実行
 
 Node.js 20.12 以上と pnpm が必要です。
 
@@ -43,3 +43,40 @@ pnpm start
 MCP エンドポイントは `MCP_SERVER_URL` です。アクセストークンの OAuth クライアント、期限、
 スコープを Google の token info endpoint で検証し、Google OpenID Connect の userinfo endpoint
 から認証ユーザーの表示名を取得します。
+
+## Cloudflare Workersへデプロイ
+
+Workers版も同じGoogle OAuth検証と `get_current_user` ツールを使用します。公開URLはリクエスト
+から自動的に判定されるため、Workersには `MCP_SERVER_URL`、`HOST`、`PORT` の設定は不要です。
+
+1. WranglerでCloudflareへログインします。
+
+   ```sh
+   pnpm exec wrangler login
+   ```
+
+2. Google OAuthクライアントIDをWorkerのsecretとして登録します。
+
+   ```sh
+   pnpm exec wrangler secret put GOOGLE_CLIENT_ID
+   ```
+
+3. デプロイします。
+
+   ```sh
+   pnpm worker:deploy
+   ```
+
+デプロイ完了時に表示されるURLの末尾へ `/mcp` を付けたものがMCPエンドポイントです。たとえば
+Worker URLが `https://auth-mcp.example.workers.dev` の場合は
+`https://auth-mcp.example.workers.dev/mcp` です。
+
+ローカルでWorkers版を動かす場合は、既存の `.env` から `GOOGLE_CLIENT_ID` が読み込まれます。
+
+```sh
+pnpm worker:dev
+```
+
+既定のMCPエンドポイントは `http://localhost:8787/mcp` です。GoogleはDynamic Client
+Registrationを提供しないため、接続するMCPクライアントには同じGoogle OAuthクライアントIDと、
+そのクライアント用にGoogle Cloud Consoleへ登録したリダイレクトURIを設定してください。

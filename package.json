@@ -12,7 +12,10 @@
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "build": "tsc && chmod 755 build/index.js",
-    "start": "node build/index.js"
+    "start": "node build/index.js",
+    "worker:dev": "wrangler dev",
+    "worker:deploy": "wrangler deploy",
+    "worker:check": "wrangler deploy --dry-run"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "^2.0.0"
@@ -21,6 +24,7 @@
     "@types/node": "^26.2.0",
     "oxfmt": "^0.63.0",
     "oxlint": "^1.78.0",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "wrangler": "^4.120.1"
   }
 }
