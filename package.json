@@ -15,8 +15,7 @@
     "start": "node build/index.js"
   },
   "dependencies": {
-    "@modelcontextprotocol/server": "^2.0.0",
-    "zod": "^4.4.3"
+    "@modelcontextprotocol/server": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^26.2.0",
